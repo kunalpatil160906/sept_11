@@ -1,0 +1,17 @@
+node {
+    env.APP_ENV = 'staging'
+
+    stage('Build') {
+        retry(3) {
+            sh 'make build'
+        }
+    }
+
+    stage('Test') {
+        try {
+            sh 'make test'
+        } catch (err) {
+            currentBuild.result = 'UNSTABLE'
+        }
+    }
+}
